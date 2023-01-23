@@ -74,4 +74,13 @@ describe("TableService", function () {
     }
     expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
   });
+  it("should return current player as null if the game has not started", () => {
+    expect(tableService.currentPlayer).to.equal(null);
+  });
+  it("should return current player whose turn is to play", () => {
+    tableService.addPlayer({ id: "player1", name: "Messi" });
+    tableService.addPlayer({ id: "player2", name: "Ronaldo" });
+    tableService.start();
+    expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
+  });
 });
