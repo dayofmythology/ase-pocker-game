@@ -83,4 +83,20 @@ describe("TableService", function () {
     tableService.start();
     expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
   });
+  it("should return empty array of cards if the cards are not dealt", () => {
+    tableService.addPlayer({ id: "player2", name: "Ronaldo" });
+    expect(tableService.getPlayerCards("player2")).to.eql([]);
+  });
+  it("should return list of cards present with a player once the cards are dealt", () => {
+    tableService.addPlayer({ id: "player1", name: "Messi" });
+    tableService.addPlayer({ id: "player2", name: "Ronaldo" });
+    tableService.start();
+    for (const player of tableService.players) {
+      const cards = tableService.getPlayerCards(player.id);
+      expect(cards).to.have.lengthOf(2);
+      for (const card of cards) {
+        expect(typeof card).to.equal("object");
+      }
+    }
+  });
 });
