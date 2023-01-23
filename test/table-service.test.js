@@ -35,4 +35,7 @@ describe("TableService", function () {
   it("should return table state as open when the table is create", () => {
     expect(tableService.state).to.equal(State.OPEN);
   });
+  it("should return empty players list when the table is create", () => {
+    expect(tableService.players).to.eqls([]);
+  });
 });
