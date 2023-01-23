@@ -47,4 +47,31 @@ describe("TableService", function () {
     expect(player.name).to.equal("Messi");
     expect(player.is_active).to.equal(false);
   });
+  it("should switch table state to PRE_FLOP when the game starts", () => {
+    tableService.addPlayer({ id: "player1", name: "Messi" });
+    tableService.addPlayer({ id: "player2", name: "Ronaldo" });
+    tableService.start();
+    expect(tableService.state).to.equal(State.PRE_FLOP);
+  });
+  it("should throw error when the game starts with less than 2 players", () => {
+    tableService.addPlayer({ id: "player1", name: "Messi" });
+    expect(() => tableService.start()).to.throws(
+      Error,
+      "Insufficent number of players present, current player count 1"
+    );
+  });
+  it("should successfully start the game by distributing the cards and setting current player", () => {
+    tableService.addPlayer({ id: "player1", name: "Messi" });
+    tableService.addPlayer({ id: "player2", name: "Ronaldo" });
+    tableService.addPlayer({ id: "player3", name: "Kane" });
+    tableService.start();
+    expect(tableService.state).to.equal(State.PRE_FLOP);
+    expect(tableService.players).to.have.lengthOf(3);
+    for (const player of tableService.players) {
+      expect(player.is_active).to.equal(true);
+      expect(player.cash).to.equal(100);
+      expect(player.cards).to.have.lengthOf(2);
+    }
+    expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
+  });
 });
