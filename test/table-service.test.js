@@ -38,4 +38,13 @@ describe("TableService", function () {
   it("should return empty players list when the table is create", () => {
     expect(tableService.players).to.eqls([]);
   });
+  it("should add player to the table and set player to inactive", () => {
+    tableService.addPlayer({ id: "player1", name: "Messi" });
+    const player = tableService.players[0];
+    expect(tableService.players).to.have.lengthOf(1);
+    expect(player.cash).to.equal(100);
+    expect(player.id).to.equal("player1");
+    expect(player.name).to.equal("Messi");
+    expect(player.is_active).to.equal(false);
+  });
 });
