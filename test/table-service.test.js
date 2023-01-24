@@ -91,4 +91,15 @@ describe('TableService', function () {
       }
     }
   });
+  it('should return empty community cards when the game is in OPEN state', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    expect(tableService.communityCards).to.eqls([]);
+  });
+  it('should return empty community cards when the game is in PRE FLOP state', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.start();
+    expect(tableService.communityCards).to.eqls([]);
+  });
 });
