@@ -2,6 +2,7 @@ import Action from '../lib/action.js';
 import State from '../lib/state.js';
 import { assert, expect } from 'chai'; // CHOICE: use assert or expect
 import { TableService, Player } from '../index.js';
+import { IllegalActionError, IllegalAmountError } from '../lib/errors.js';
 
 // TODO: implement proper unit tests
 describe('TableService', function () {
@@ -164,5 +165,38 @@ describe('TableService', function () {
     tableService.performAction(Action.FOLD);
     expect(tableService.winner.id).to.equal('player1');
     expect(tableService.state).to.equal(State.ENDED);
+  });
+  it('should add the rasied amount to the bet', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    tableService.performAction(Action.RAISE, 10);
+    expect(tableService.bets[tableService.players[0].id]).to.equal(10);
+    expect(tableService.players[0].cash).to.equal(100 - 10);
+  });
+  it('should throw error if the bet amount is less than the current bet', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    tableService.performAction(Action.RAISE, 10);
+    tableService.performAction(Action.RAISE, 20);
+    expect(() => tableService.performAction(Action.RAISE, 10)).to.throws(IllegalAmountError);
+  });
+  it("should throw error if the bet amount is greater than player's cash", () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    expect(() => tableService.performAction(Action.RAISE, 110)).to.throws(IllegalAmountError);
+  });
+  it("should throw error if the bet amount is greater than any player's remaining cash", () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    tableService.performAction(Action.RAISE, 50);
+    expect(() => tableService.performAction(Action.RAISE, 60)).to.throws(IllegalAmountError);
   });
 });
