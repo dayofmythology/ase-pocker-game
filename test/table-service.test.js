@@ -1,3 +1,4 @@
+import Action from '../lib/action.js';
 import State from '../lib/state.js';
 import { assert, expect } from 'chai'; // CHOICE: use assert or expect
 import { TableService, Player } from '../index.js';
@@ -101,5 +102,15 @@ describe('TableService', function () {
     tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
     tableService.start();
     expect(tableService.communityCards).to.eqls([]);
+  });
+  it('should set current player to next player when action is performed', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.start();
+    expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
+    tableService.performAction(Action.CHECK);
+    expect(tableService.currentPlayer.id).to.equal(tableService.players[1].id);
+    tableService.performAction(Action.CHECK);
+    expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
   });
 });
