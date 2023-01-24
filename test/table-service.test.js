@@ -113,4 +113,13 @@ describe('TableService', function () {
     tableService.performAction(Action.CHECK);
     expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
   });
+  it('should initialize bets to 0 when the game start', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.start();
+    const bets = tableService.bets;
+    for (const val of Object.values(bets)) {
+      expect(val).to.equal(0);
+    }
+  });
 });
