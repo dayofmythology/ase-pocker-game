@@ -134,4 +134,16 @@ describe('TableService', function () {
     expect(tableService.communityCards).to.have.lengthOf(3);
     expect(tableService.state).to.equal(State.FLOP);
   });
+  it('should ignore inactive players while determining next current player', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    tableService.players[1].setActive(false);
+    expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
+    tableService.performAction(Action.CHECK);
+    expect(tableService.currentPlayer.id).to.equal(tableService.players[2].id);
+    tableService.performAction(Action.CHECK);
+    expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
+  });
 });
