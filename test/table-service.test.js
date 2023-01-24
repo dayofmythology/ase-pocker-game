@@ -122,4 +122,16 @@ describe('TableService', function () {
       expect(val).to.equal(0);
     }
   });
+  it('should draw three community cards when all players have checked', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.start();
+    expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
+    tableService.performAction(Action.CHECK);
+    expect(tableService.currentPlayer.id).to.equal(tableService.players[1].id);
+    tableService.performAction(Action.CHECK);
+    expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
+    expect(tableService.communityCards).to.have.lengthOf(3);
+    expect(tableService.state).to.equal(State.FLOP);
+  });
 });
