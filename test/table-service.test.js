@@ -146,4 +146,23 @@ describe('TableService', function () {
     tableService.performAction(Action.CHECK);
     expect(tableService.currentPlayer.id).to.equal(tableService.players[0].id);
   });
+  it('should perform fold action successfully for the current player', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    tableService.performAction(Action.FOLD);
+    expect(tableService.players[0].is_active).to.equal(false);
+  });
+  it('should detemine winner when all but one player has folded and stata has ENDED', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    tableService.performAction(Action.CHECK);
+    tableService.performAction(Action.FOLD);
+    tableService.performAction(Action.FOLD);
+    expect(tableService.winner.id).to.equal('player1');
+    expect(tableService.state).to.equal(State.ENDED);
+  });
 });
