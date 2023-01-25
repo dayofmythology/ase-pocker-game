@@ -229,4 +229,55 @@ describe('TableService', function () {
       'Cannot perform CHECK when previous players have not performed CHECK'
     );
   });
+  it('should not end round if all players have not performed the actions', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    tableService.performAction(Action.RAISE, 10);
+    tableService.performAction(Action.CALL);
+    expect(tableService.state).to.equal(State.PRE_FLOP);
+    tableService.performAction(Action.RAISE, 30);
+    tableService.performAction(Action.CALL);
+    tableService.performAction(Action.CALL);
+    expect(tableService.state).to.equal(State.FLOP);
+    for (const bet of Object.values(tableService.bets)) {
+      expect(bet).to.equal(0);
+    }
+  });
+  it('should end game when all the rounds are completed', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    tableService.performAction(Action.RAISE, 10);
+    tableService.performAction(Action.CALL);
+    expect(tableService.state).to.equal(State.PRE_FLOP);
+    expect(tableService.pot).to.equal(0);
+    tableService.performAction(Action.RAISE, 30);
+    tableService.performAction(Action.CALL);
+    tableService.performAction(Action.CALL);
+    expect(tableService.pot).to.equal(90);
+    expect(tableService.state).to.equal(State.FLOP);
+    tableService.performAction(Action.CHECK);
+    tableService.performAction(Action.CHECK);
+    tableService.performAction(Action.CHECK);
+    expect(tableService.pot).to.equal(90);
+    expect(tableService.state).to.equal(State.TURN);
+    tableService.performAction(Action.RAISE, 10);
+    tableService.performAction(Action.RAISE, 20);
+    tableService.performAction(Action.RAISE, 30);
+    tableService.performAction(Action.CALL);
+    tableService.performAction(Action.CALL);
+    expect(tableService.pot).to.equal(180);
+    expect(tableService.state).to.equal(State.RIVER);
+    tableService.performAction(Action.CHECK);
+    tableService.performAction(Action.CHECK);
+    tableService.performAction(Action.CHECK);
+    expect(tableService.pot).to.equal(180);
+    expect(tableService.state).to.equal(State.ENDED);
+    for (const bet of Object.values(tableService.bets)) {
+      expect(bet).to.equal(0);
+    }
+  });
 });
