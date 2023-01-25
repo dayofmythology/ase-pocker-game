@@ -188,4 +188,14 @@ describe('TableService', function () {
     tableService.performAction(Action.RAISE, 50);
     expect(() => tableService.performAction(Action.RAISE, 60)).to.throws(IllegalAmountError);
   });
+  it('should throw error if call action is performed before raise', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    expect(() => tableService.performAction(Action.CALL, 50)).to.throws(
+      IllegalActionError,
+      'CALL action cannot be performed before RAISE'
+    );
+  });
 });
