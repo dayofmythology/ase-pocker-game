@@ -1,19 +1,14 @@
 import Action from '../lib/action.js';
 import State from '../lib/state.js';
 import { assert, expect } from 'chai'; // CHOICE: use assert or expect
-import { TableService, Card } from '../index.js';
+import { TableService, Card, Deck } from '../index.js';
 import { IllegalActionError, IllegalAmountError } from '../lib/errors.js';
 
 // TODO: implement proper unit tests
 describe('TableService', function () {
   let tableService = null;
   this.beforeEach(function () {
-    tableService = TableService.getInstance();
-  });
-
-  // how to reset using mocha
-  this.afterEach(() => {
-    TableService.resetInstance();
+    tableService = new TableService(new Deck());
   });
   it('should return table state as open when the table is create', () => {
     expect(tableService.state).to.equal(State.OPEN);
@@ -222,5 +217,16 @@ describe('TableService', function () {
     expect(tableService.players[0].cash).to.equal(100 - 30);
     expect(tableService.players[1].cash).to.equal(100 - 30);
     expect(tableService.players[2].cash).to.equal(100 - 30);
+  });
+  it('should throw error if a player performs CHECK when non CHECK actions are performed in the same round', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    tableService.performAction(Action.RAISE, 10);
+    expect(() => tableService.performAction(Action.CHECK)).to.throws(
+      IllegalActionError,
+      'Cannot perform CHECK when previous players have not performed CHECK'
+    );
   });
 });
