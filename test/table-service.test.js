@@ -193,9 +193,34 @@ describe('TableService', function () {
     tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
     tableService.addPlayer({ id: 'player3', name: 'Kane' });
     tableService.start();
-    expect(() => tableService.performAction(Action.CALL, 50)).to.throws(
+    expect(() => tableService.performAction(Action.CALL)).to.throws(
       IllegalActionError,
       'CALL action cannot be performed before RAISE'
     );
+  });
+  it('should deduct the bet amount when CALL is performed', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    tableService.performAction(Action.RAISE, 20);
+    tableService.performAction(Action.RAISE, 30);
+    tableService.performAction(Action.CALL);
+    expect(tableService.players[0].cash).to.equal(100 - 20);
+    expect(tableService.players[1].cash).to.equal(100 - 30);
+    expect(tableService.players[2].cash).to.equal(100 - 30);
+  });
+  it('should deduct the difference amount between currnet max bet and previous raised amount by the current player when CALL is performed', () => {
+    tableService.addPlayer({ id: 'player1', name: 'Messi' });
+    tableService.addPlayer({ id: 'player2', name: 'Ronaldo' });
+    tableService.addPlayer({ id: 'player3', name: 'Kane' });
+    tableService.start();
+    tableService.performAction(Action.RAISE, 20);
+    tableService.performAction(Action.RAISE, 30);
+    tableService.performAction(Action.CALL);
+    tableService.performAction(Action.CALL);
+    expect(tableService.players[0].cash).to.equal(100 - 30);
+    expect(tableService.players[1].cash).to.equal(100 - 30);
+    expect(tableService.players[2].cash).to.equal(100 - 30);
   });
 });
