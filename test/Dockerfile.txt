@@ -1,0 +1,6 @@
+from alpine
+RUN 'sh ashasasa'
+CMD ['echo hello world']
+COPY installation_media /opt/local/
+RUN .installation_media --
+VOLUME [ "/data" ]

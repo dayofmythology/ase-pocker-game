@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  
+Parameters:
+  
+Metadata:
+  
+Mappings:
+  
+Conditions:
+  
+Resources:
+  MyServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      AdditionalInfo: "String"
+      Affinity: "String"
+      AvailabilityZone: "String"
+      BlockDeviceMappings: 
+        BlockDeviceMappings
+      CpuOptions:
+        CoreCount: Number
+        ThreadsPerCore: Number
+      CreditSpecification:
+        CPUCredits: "Number"
+      DisableApiTermination: false
+      EbsOptimized: false
+      ElasticGpuSpecifications: 
+        ElasticGpuSpecifications
+      ElasticInferenceAccelerators: 
+        ElasticInferenceAccelerators
+      EnclaveOptions:
+        Enabled: false
+      HibernationOptions:
+        Configured: false
+      HostId: "String"
+      HostResourceGroupArn: "String"
+      IamInstanceProfile: "String"
+      ImageId: "Ama"
+      InstanceInitiatedShutdownBehavior: "String"
+      InstanceType: "String"
+      Ipv6AddressCount: Number
+      Ipv6Addresses: 
+        Ipv6Addresses
+      KernelId: "String"
+      KeyName: "String"
+      LaunchTemplate:
+        LaunchTemplateId: "String"
+        LaunchTemplateName: "String"
+        Version: "String"
+      LicenseSpecifications: 
+        LicenseSpecifications
+      Monitoring: String
+      NetworkInterfaces: 
+        NetworkInterfaces
+      PlacementGroupName: "String"
+      PrivateDnsNameOptions:
+        EnableResourceNameDnsAAAARecord: false
+        EnableResourceNameDnsARecord: false
+        HostnameType: "String"
+      PrivateIpAddress: "false"
+      PropagateTagsToVolumeOnCreation: String
+      RamdiskId: "String"
+      SecurityGroupIds: 
+        SecurityGroupIds
+      SecurityGroups: 
+        SecurityGroups
+      SourceDestCheck: false
+      SsmAssociations: 
+        SsmAssociations
+      SubnetId: "String"
+      Tags: 
+        Tags
+      Tenancy: "String"
+      UserData: "String"
+      Volumes: 
+        Volumes
+  LogicalID:
+    Type: AWS::DynamoDB::GlobalTable
+    Properties:
+      AttributeDefinitions: # Required
+        AttributeDefinitions
+      BillingMode: "String"
+      GlobalSecondaryIndexes: 
+        GlobalSecondaryIndexes
+      KeySchema: # Required
+        KeySchema
+      LocalSecondaryIndexes: 
+        LocalSecondaryIndexes
+      Replicas: # Required
+        Replicas
+      SSESpecification:
+        SSEEnabled: false
+        SSEType: "String"
+      StreamSpecification:
+        StreamViewType: "String"
+      TableName: "String"
+      TimeToLiveSpecification:
+        AttributeName: "String"
+        Enabled: false
+      WriteProvisionedThroughputSettings:
+Transform:
+  
+Outputs:
